@@ -17,51 +17,76 @@ static FILE* vmm_log;
 
 void vmm_init (FILE *log)
 {
-  // Initialise le fichier de journal.
-  vmm_log = log;
+    // Initialise le fichier de journal.
+    vmm_log = log;
 }
 
 
 // NE PAS MODIFIER CETTE FONCTION
 static void vmm_log_command (FILE *out, const char *command,
-                             unsigned int laddress, /* Logical address. */
-		             unsigned int page,
-                             unsigned int frame,
-                             unsigned int offset,
-                             unsigned int paddress, /* Physical address.  */
-		             char c) /* Caractère lu ou écrit.  */
+        unsigned int laddress, /* Logical address. */
+        unsigned int page,
+        unsigned int frame,
+        unsigned int offset,
+        unsigned int paddress, /* Physical address.  */
+        char c) /* Caractère lu ou écrit.  */
 {
-  if (out)
-    fprintf (out, "%s[%c]@%05d: p=%d, o=%d, f=%d pa=%d\n", command, c, laddress,
-	     page, offset, frame, paddress);
+    if (out)
+        fprintf (out, "%s[%c]@%05d: p=%d, o=%d, f=%d pa=%d\n", command, c, laddress,
+                page, offset, frame, paddress);
 }
 
 /* Effectue une lecture à l'adresse logique `laddress`.  */
 char vmm_read (unsigned int laddress)
 {
-  char c = '!';
-  read_count++;
-  /* ¡ TODO: COMPLÉTER ! */
-
-  // TODO: Fournir les arguments manquants.
-  vmm_log_command (stdout, "READING", laddress, 0, 0, 0, 0, c);
-  return c;
+    char c = '!';
+    read_count++;
+    
+    /* ¡ TODO: COMPLÉTER ! */
+    int page = laddress >> 8;       // 8 most significant bits
+    int offset = laddress & 0xFF;   // 8 least significant bits
+    
+    int frame;
+    if ((frame = tlb_lookup(page, false)) < 0) {
+        if ((frame = pt_lookup(page)) < 0) {
+            // TODO: RETROUVER LA PAGE DANS LE BACKING STORE
+        }
+    }
+        
+    int paddress = 0; // TODO
+    
+    // TODO: Fournir les arguments manquants.
+    vmm_log_command (
+            stdout, "READING", laddress, page, frame, offset, paddress, c);
+    return c;
 }
 
 /* Effectue une écriture à l'adresse logique `laddress`.  */
 void vmm_write (unsigned int laddress, char c)
 {
-  write_count++;
-  /* ¡ TODO: COMPLÉTER ! */
-
-  // TODO: Fournir les arguments manquants.
-  vmm_log_command (stdout, "WRITING", laddress, 0, 0, 0, 0, c);
+    write_count++;
+    /* ¡ TODO: COMPLÉTER ! */
+    int page = laddress >> 8;       // 8 most significant bits
+    int offset = laddress & 0xFF;   // 8 least significant bits
+    
+    int frame;
+    if ((frame = tlb_lookup(page, true)) < 0) {
+        if ((frame = pt_lookup(page)) < 0) {
+            // TODO: RETROUVER LA PAGE DANS LE BACKING STORE
+        }
+    }
+        
+    int paddress = 0; // TODO
+    
+    // TODO: Fournir les arguments manquants.
+    vmm_log_command (
+            stdout, "WRITING", laddress, page, frame, offset, paddress, c);
 }
 
 
 // NE PAS MODIFIER CETTE FONCTION
 void vmm_clean (void)
 {
-  fprintf (stdout, "VM reads : %4u\n", read_count);
-  fprintf (stdout, "VM writes: %4u\n", write_count);
+    fprintf (stdout, "VM reads : %4u\n", read_count);
+    fprintf (stdout, "VM writes: %4u\n", write_count);
 }

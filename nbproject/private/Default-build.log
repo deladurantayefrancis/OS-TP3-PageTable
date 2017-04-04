@@ -1,0 +1,10 @@
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild -c -o build/tlb.o src/tlb.c
+cd build; bison -d ../src/parse.y
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild   -c -o build/parse.tab.o build/parse.tab.c
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild -c -o build/vmm.o src/vmm.c
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild -c -o build/pm.o src/pm.c
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild -c -o build/pt.o src/pt.c
+flex -o build/tokens.c src/tokens.l
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild   -c -o build/tokens.o build/tokens.c
+gcc -g -std=gnu99 -Wall -pedantic -Isrc -Ibuild -c -o build/common.o src/common.c
+gcc  -o build/vmm build/tlb.o build/parse.tab.o build/vmm.o build/pm.o build/pt.o build/tokens.o build/common.o

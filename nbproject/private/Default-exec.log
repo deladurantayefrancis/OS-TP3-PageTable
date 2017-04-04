@@ -1,0 +1,166 @@
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/tlb.o
+	src/tlb.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/parse.tab.o
+	build/parse.tab.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/vmm.o
+	src/vmm.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/pm.o
+	src/pm.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/pt.o
+	src/pt.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/tokens.o
+	build/tokens.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-g
+	-std=gnu99
+	-Wall
+	-pedantic
+	-Isrc
+	-Ibuild
+	-c
+	-o
+	build/common.o
+	src/common.c
+
+called: gcc
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	gcc
+	-o
+	build/vmm
+	build/tlb.o
+	build/parse.tab.o
+	build/vmm.o
+	build/pm.o
+	build/pt.o
+	build/tokens.o
+	build/common.o
+
+called: /usr/bin/ld
+	/home/francis/Documents/IFT 2245 - Systèmes d'exploitation/TP3/tp3
+	/usr/bin/ld
+	-plugin
+	/usr/lib/gcc/x86_64-linux-gnu/5/liblto_plugin.so
+	-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/5/lto-wrapper
+	-plugin-opt=-fresolution=/tmp/cccp1LD6.res
+	-plugin-opt=-pass-through=-lgcc
+	-plugin-opt=-pass-through=-lgcc_s
+	-plugin-opt=-pass-through=-lc
+	-plugin-opt=-pass-through=-lgcc
+	-plugin-opt=-pass-through=-lgcc_s
+	--sysroot=/
+	--build-id
+	--eh-frame-hdr
+	-m
+	elf_x86_64
+	--hash-style=gnu
+	--as-needed
+	-dynamic-linker
+	/lib64/ld-linux-x86-64.so.2
+	-z
+	relro
+	-o
+	build/vmm
+	/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crt1.o
+	/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crti.o
+	/usr/lib/gcc/x86_64-linux-gnu/5/crtbegin.o
+	-L/usr/lib/gcc/x86_64-linux-gnu/5
+	-L/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu
+	-L/usr/lib/gcc/x86_64-linux-gnu/5/../../../../lib
+	-L/lib/x86_64-linux-gnu
+	-L/lib/../lib
+	-L/usr/lib/x86_64-linux-gnu
+	-L/usr/lib/../lib
+	-L/usr/lib/gcc/x86_64-linux-gnu/5/../../..
+	build/tlb.o
+	build/parse.tab.o
+	build/vmm.o
+	build/pm.o
+	build/pt.o
+	build/tokens.o
+	build/common.o
+	-lgcc
+	--as-needed
+	-lgcc_s
+	--no-as-needed
+	-lc
+	-lgcc
+	--as-needed
+	-lgcc_s
+	--no-as-needed
+	/usr/lib/gcc/x86_64-linux-gnu/5/crtend.o
+	/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/crtn.o
+
