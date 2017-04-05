@@ -24,22 +24,52 @@ void pm_init (FILE *backing_store, FILE *log)
 // Charge la page demandée du backing store
 void pm_download_page (unsigned int page_number, unsigned int frame_number)
 {
-    download_count++;
     /* ¡ TODO: COMPLÉTER ! */
+    char buffer[PAGE_FRAME_SIZE + 1];
     
+    if (fseek(pm_backing_store, page_number * PAGE_FRAME_SIZE, SEEK_SET))
+    {
+        printf("ERREUR: fseek a échoué dans la fonction pm_download_page");
+        return;
+    }
+    
+    if (fread(buffer, PAGE_FRAME_SIZE, 1, pm_backing_store) < 1)
+    {
+        printf("ERREUR: fread a échoué dans la fonction pm_download_page");
+        return;
+    }
+    
+    strncpy(&pm_memory[frame_number * PAGE_FRAME_SIZE], 
+            buffer, 
+            PAGE_FRAME_SIZE);
+    
+    download_count++;
 }
 
 // Sauvegarde la frame spécifiée dans la page du backing store
 void pm_backup_frame (unsigned int frame_number, unsigned int page_number)
 {
-    backup_count++;
-    /* ¡ TODO: COMPLÉTER ! */
+    char buffer[PAGE_FRAME_SIZE + 1];
+    memset(buffer, '\0', PAGE_FRAME_SIZE + 1);
     
+    if (fseek(pm_backing_store, page_number * PAGE_FRAME_SIZE, SEEK_SET))
+    {
+        printf("ERREUR: fseek a échoué dans la fonction pm_backup_frame");
+        return;
+    }
+    
+    strncpy(buffer, 
+            &pm_memory[frame_number * PAGE_FRAME_SIZE], 
+            PAGE_FRAME_SIZE);
+    
+    fputs(buffer, pm_backing_store);
+    backup_count++;
 }
 
 char pm_read (unsigned int physical_address)
 {
     read_count++;
+    
     /* ¡ TODO: COMPLÉTER ! */
     return '!';
 }

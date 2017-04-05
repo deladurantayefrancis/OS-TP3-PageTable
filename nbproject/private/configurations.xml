@@ -4,7 +4,6 @@
     <df root="." name="0">
       <df name="build">
         <in>parse.tab.c</in>
-        <in>parse.tab.h</in>
         <in>tokens.c</in>
       </df>
       <df name="src">

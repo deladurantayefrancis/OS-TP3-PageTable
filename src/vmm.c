@@ -46,14 +46,19 @@ char vmm_read (unsigned int laddress)
     int page = laddress >> 8;       // 8 most significant bits
     int offset = laddress & 0xFF;   // 8 least significant bits
     
-    int frame;
+    int frame = -1;
+    int paddress = -1;
+    
     if ((frame = tlb_lookup(page, false)) < 0) {
-        if ((frame = pt_lookup(page)) < 0) {
-            // TODO: RETROUVER LA PAGE DANS LE BACKING STORE
-        }
+        frame = pt_lookup(page);
     }
-        
-    int paddress = 0; // TODO
+    
+    if (frame < 0) {
+        printf("ERREUR: Tentative de lecture à une adresse invalide\n");
+    } else {
+        paddress = (frame << 8) + offset;
+        pm_read(paddress);
+    }
     
     // TODO: Fournir les arguments manquants.
     vmm_log_command (
@@ -69,14 +74,19 @@ void vmm_write (unsigned int laddress, char c)
     int page = laddress >> 8;       // 8 most significant bits
     int offset = laddress & 0xFF;   // 8 least significant bits
     
-    int frame;
+    int frame = -1;
+    int paddress = -1;
+    
     if ((frame = tlb_lookup(page, true)) < 0) {
-        if ((frame = pt_lookup(page)) < 0) {
-            // TODO: RETROUVER LA PAGE DANS LE BACKING STORE
-        }
+        frame = pt_lookup(page);
     }
-        
-    int paddress = 0; // TODO
+    
+    if (frame < 0) {
+        printf("ERREUR: Tentative d'écriture à une adresse invalide\n");
+    } else {
+        paddress = (frame << 8) + offset;
+        pm_write(paddress, c);
+    }
     
     // TODO: Fournir les arguments manquants.
     vmm_log_command (
