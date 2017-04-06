@@ -24,8 +24,8 @@ void pm_init (FILE *backing_store, FILE *log)
 // Charge la page demandée du backing store
 void pm_download_page (unsigned int page_number, unsigned int frame_number)
 {
-    /* ¡ TODO: COMPLÉTER ! */
     char buffer[PAGE_FRAME_SIZE + 1];
+    memset(buffer, '\0', PAGE_FRAME_SIZE + 1);
     
     if (fseek(pm_backing_store, page_number * PAGE_FRAME_SIZE, SEEK_SET))
     {
@@ -68,16 +68,23 @@ void pm_backup_frame (unsigned int frame_number, unsigned int page_number)
 
 char pm_read (unsigned int physical_address)
 {
-    read_count++;
-    
-    /* ¡ TODO: COMPLÉTER ! */
-    return '!';
+    if (physical_address < PHYSICAL_MEMORY_SIZE && physical_address >= 0) {
+        read_count++;
+        return pm_memory[physical_address];
+    } else {
+        printf("ERREUR: tentative de lecture à une adresse physique invalide");
+        return '!';
+    }
 }
 
 void pm_write (unsigned int physical_address, char c)
 {
-    write_count++;
-    /* ¡ TODO: COMPLÉTER ! */
+    if (physical_address < PHYSICAL_MEMORY_SIZE && physical_address >= 0) {
+        write_count++;
+        pm_memory[physical_address] = c;
+    } else {
+        printf("ERREUR: tentative d'écriture à une adresse physique invalide");
+    }
 }
 
 

@@ -3,6 +3,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "conf.h"
 #include "common.h"
@@ -40,46 +41,46 @@ static void vmm_log_command (FILE *out, const char *command,
 char vmm_read (unsigned int laddress)
 {
     char c = '!';
-    read_count++;
-    
-    /* ¡ TODO: COMPLÉTER ! */
-    int page = laddress >> 8;       // 8 most significant bits
-    int offset = laddress & 0xFF;   // 8 least significant bits
-    
     int frame = -1;
     int paddress = -1;
     
-    if ((frame = tlb_lookup(page, false)) < 0) {
+    int page = laddress >> 8;       // 8 most significant bits
+    int offset = laddress & 0xFF;   // 8 least significant bits
+    
+    
+    if ((frame = tlb_lookup(page, false)) < 0)
         frame = pt_lookup(page);
-    }
     
     if (frame < 0) {
-        printf("ERREUR: Tentative de lecture à une adresse invalide\n");
+        srand(time(NULL));
+        int index = rand() % NUM_FRAMES;
+        
+        
     } else {
         paddress = (frame << 8) + offset;
         pm_read(paddress);
     }
     
-    // TODO: Fournir les arguments manquants.
+    tlb_add_entry(page, frame, false);
+    
     vmm_log_command (
             stdout, "READING", laddress, page, frame, offset, paddress, c);
+    
+    read_count++;
     return c;
 }
 
 /* Effectue une écriture à l'adresse logique `laddress`.  */
 void vmm_write (unsigned int laddress, char c)
 {
-    write_count++;
-    /* ¡ TODO: COMPLÉTER ! */
-    int page = laddress >> 8;       // 8 most significant bits
-    int offset = laddress & 0xFF;   // 8 least significant bits
-    
     int frame = -1;
     int paddress = -1;
     
-    if ((frame = tlb_lookup(page, true)) < 0) {
+    int page = laddress >> 8;       // 8 most significant bits
+    int offset = laddress & 0xFF;   // 8 least significant bits
+    
+    if ((frame = tlb_lookup(page, true)) < 0)
         frame = pt_lookup(page);
-    }
     
     if (frame < 0) {
         printf("ERREUR: Tentative d'écriture à une adresse invalide\n");
@@ -88,9 +89,12 @@ void vmm_write (unsigned int laddress, char c)
         pm_write(paddress, c);
     }
     
-    // TODO: Fournir les arguments manquants.
+    tlb_add_entry(page, frame, false);
+    
     vmm_log_command (
             stdout, "WRITING", laddress, page, frame, offset, paddress, c);
+    
+    write_count++;
 }
 
 
