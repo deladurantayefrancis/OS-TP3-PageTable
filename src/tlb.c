@@ -68,20 +68,21 @@ static int tlb__lookup (unsigned int page_number, bool write)
 static void tlb__add_entry (unsigned int page_number,
         unsigned int frame_number, bool readonly)
 {
-    int index = 0;
+    int victim = 0;
+    
     for (int i = 0; i < TLB_NUM_ENTRIES; i++)
     {
-        if (tlb_refs[i] < tlb_refs[index]) {
-            index = i;
+        if (tlb_refs[i] < tlb_refs[victim]) {
+            victim = i;
         }
         
         tlb_refs[i] >>= 1;  // Fait 'vieillir' l'entrée.
     }
     
-    tlb_refs[index] = 0x8000;   // Valeur initiale pour la politique LRU.
-    tlb_entries[index].page_number = page_number;
-    tlb_entries[index].frame_number = frame_number;
-    tlb_entries[index].readonly = readonly;
+    tlb_refs[victim] = 0x8000;   // Valeur initiale pour la politique LRU.
+    tlb_entries[victim].page_number = page_number;
+    tlb_entries[victim].frame_number = frame_number;
+    tlb_entries[victim].readonly = readonly;
 }
 
 /******************** ¡ NE RIEN CHANGER CI-DESSOUS !  ******************/
