@@ -115,7 +115,7 @@ called: /usr/bin/ld
 	-plugin
 	/usr/lib/gcc/x86_64-linux-gnu/5/liblto_plugin.so
 	-plugin-opt=/usr/lib/gcc/x86_64-linux-gnu/5/lto-wrapper
-	-plugin-opt=-fresolution=/tmp/cccp1LD6.res
+	-plugin-opt=-fresolution=/tmp/cciaVUyZ.res
 	-plugin-opt=-pass-through=-lgcc
 	-plugin-opt=-pass-through=-lgcc_s
 	-plugin-opt=-pass-through=-lc
