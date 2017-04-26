@@ -153,7 +153,7 @@ int main (int argc, char *argv[])
 
   if (opt == argc)
     error (usage, argv[0]);
-  backstore = fopen (argv[opt], "rw");
+  backstore = fopen (argv[opt], "r+");
   if (!backstore)
     error ("Could not open file `%s`\n", argv[opt]);
 

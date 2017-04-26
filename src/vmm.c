@@ -58,28 +58,11 @@ char vmm_read (unsigned int laddress)
             pt_set_entry(page, frame);
         }
         
-        tlb_add_entry(page, frame, true);
+        tlb_add_entry(page, frame, pt_readonly_p(page));
     }
     
     paddress = (frame << 8) + offset;
-    pm_read(paddress);
-    
-    if (frame < 0) {
-        srand(time(NULL));
-        int index = rand() % NUM_FRAMES;
-        
-        if (pt_lookup)
-        pt_unset_entry(page);
-        if (!pt_readonly_p(page)) {
-            pt
-        }
-        
-    } else {
-        tlb_set_entry
-        paddress = (frame << 8) + offset;
-        pm_read(paddress);
-    }
-    
+    c = pm_read(paddress);
     
     vmm_log_command (
             stdout, "READING", laddress, page, frame, offset, paddress, c);
@@ -97,17 +80,20 @@ void vmm_write (unsigned int laddress, char c)
     int page = laddress >> 8;       // 8 most significant bits
     int offset = laddress & 0xFF;   // 8 least significant bits
     
-    if ((frame = tlb_lookup(page, true)) < 0)
-        frame = pt_lookup(page);
-    
-    if (frame < 0) {
-        printf("ERREUR: Tentative d'écriture à une adresse invalide\n");
-    } else {
-        paddress = (frame << 8) + offset;
-        pm_write(paddress, c);
+    if ((frame = tlb_lookup(page, true)) < 0) {
+        if ((frame = pt_lookup(page)) < 0) {
+            srand(time(NULL));
+            frame = rand() % NUM_FRAMES;
+            
+            pm_download_page(page, frame);
+            pt_set_entry(page, frame);
+        }
+        
+        tlb_add_entry(page, frame, pt_readonly_p(page));
     }
     
-    tlb_add_entry(page, frame, false);
+    paddress = (frame << 8) + offset;
+    pm_write(paddress, c);
     
     vmm_log_command (
             stdout, "WRITING", laddress, page, frame, offset, paddress, c);

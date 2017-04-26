@@ -90,8 +90,6 @@ void pm_write (unsigned int physical_address, char c)
 
 void pm_clean (void)
 {
-    // Assurez vous d'enregistrer les modifications apportées au backing store!
-    
     // Enregistre l'état de la mémoire physique.
     if (pm_log)
     {
